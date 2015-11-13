@@ -4,18 +4,17 @@ var Promise = require('node-promise'),
 	all = Promise.all,
 	_ = require('underscore');
 
-function extractFiles(path) {
+function extractFiles(path, sheet) {
 	var unzip = require('unzip'),
 		deferred = defer();
 
 	var files = {
-		'xl/worksheets/sheet1.xml': {
-			deferred: defer()
-		},
 		'xl/sharedStrings.xml': {
 			deferred: defer()
 		}
 	};
+
+	files['xl/worksheets/sheet' + sheet + '.xml'] = { deferred: defer() };
 
 	require('fs').createReadStream(path)
 		.pipe(unzip.Parse())
@@ -38,9 +37,9 @@ function extractFiles(path) {
 	return deferred.promise;
 }
 
-function extractData(files) {
+function extractData(files, sheet) {
 	var libxmljs = require('libxmljs'),
-		sheet = libxmljs.parseXml(files['xl/worksheets/sheet1.xml'].contents),
+		sheet = libxmljs.parseXml(files['xl/worksheets/sheet' + sheet + '.xml'].contents),
 		strings = libxmljs.parseXml(files['xl/sharedStrings.xml'].contents),
 		ns = {a: 'http://schemas.openxmlformats.org/spreadsheetml/2006/main'},
 		data = [];
@@ -48,7 +47,7 @@ function extractData(files) {
 	var colToInt = function(col) {
 		var letters = ["", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
 		var col = col.trim().split('');
-		
+
 		var n = 0;
 
 		for (var i = 0; i < col.length; i++) {
@@ -96,8 +95,11 @@ function extractData(files) {
 	return data;
 }
 
-module.exports = function parseXlsx(path, cb) {
-	extractFiles(path).then(function(files) {
-		cb(extractData(files));
+module.exports = function parseXlsx(path, sh, cb) {
+	if (!sh) {
+		sh = 1;
+	}
+	extractFiles(path, sh).then(function(files) {
+		cb(extractData(files, sh));
 	});
 };
