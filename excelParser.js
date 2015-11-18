@@ -13,7 +13,7 @@ function extractFiles(path, sheet) {
 			deferred: defer()
 		}
 	};
-
+	
 	files['xl/worksheets/sheet' + sheet + '.xml'] = { deferred: defer() };
 
 	require('fs').createReadStream(path)
@@ -47,7 +47,7 @@ function extractData(files, sheet) {
 	var colToInt = function(col) {
 		var letters = ["", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
 		var col = col.trim().split('');
-
+		
 		var n = 0;
 
 		for (var i = 0; i < col.length; i++) {

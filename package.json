@@ -22,6 +22,16 @@
     "xls",
     "xlsx"
   ],
-  "author": "Trevor Dixon <trevordixon@gmail.com>",
-  "license": "MIT"
+  "author": {
+    "name": "Trevor Dixon",
+    "email": "trevordixon@gmail.com"
+  },
+  "license": "MIT",
+  "readme": "Excel.js\n========\n\nNative node.js Excel file parser. Only supports xlsx for now.\n\nInstall\n=======\n    npm install excel\n\nUse\n====\n    var parseXlsx = require('excel');\n\n    parseXlsx('Spreadsheet.xlsx', function(data) {\n        // data is an array of arrays\n    });\n    \nMIT License.",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/trevordixon/excel.js/issues"
+  },
+  "_id": "excel@0.0.1",
+  "_from": "excel@0.0.1"
 }
